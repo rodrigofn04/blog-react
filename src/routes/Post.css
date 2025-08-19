@@ -1,0 +1,7 @@
+.post-container {
+    text-align: center;
+}
+
+.post-container .post{
+    border-bottom: none;
+}
