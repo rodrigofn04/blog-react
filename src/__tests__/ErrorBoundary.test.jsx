@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import ErrorBoundary from '../components/ErrorBoundary'; // se tiver
+import ErrorBoundary from '../components/ErrorBoundary'; 
 
 function Bomb() {
   throw new Error('Falha forçada');
