@@ -3,26 +3,22 @@ name: Alerta Discord
 on:
   push:
     branches:
-      - '**'        # qualquer branch
+      - '**'         # notifica em qualquer branch
   pull_request:
     types: [closed]
     branches:
-      - main       # quando um PR for fechado/mergado em main
+      - main         # notifica quando PR for fechado/mergado em main
 
 jobs:
-  notify-discord:
+  notify:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Obter código
-        uses: actions/checkout@v3
-
-      - name: Enviar alerta pro Discord
-        uses: Ilshidur/action-discord@0.4.0
+      - name: Informar alerta no Discord
+        uses: Ilshidur/action-discord@v0.4.0      # action que facilita enviar mensagem
         with:
           args: |
-            🚨 Evento: `${{ github.event_name }}`  
-            Repositório: **${{ github.repository }}**  
+            🚀 Repositório **${{ github.repository }}** recebeu um evento `${{ github.event_name }}`  
             Branch: `${{ github.ref }}`  
             Autor: `${{ github.actor }}`  
             Commit: `${{ github.sha }}`  
