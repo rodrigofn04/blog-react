@@ -4,7 +4,6 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Home from '../routes/Home';
 
-// Mock da chamada de API para que ela retorne dados simulados
 jest.mock('../axios/config', () => ({
   get: jest.fn(() =>
     Promise.resolve({
@@ -23,8 +22,6 @@ describe('Home route/page', () => {
         <Home />
       </MemoryRouter>
     );
-
-    // Use findByText para esperar que os dados da API sejam carregados
     expect(await screen.findByText('Post A')).toBeInTheDocument();
     expect(await screen.findByText('Post B')).toBeInTheDocument();
   });

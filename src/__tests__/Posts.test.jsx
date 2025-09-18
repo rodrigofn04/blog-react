@@ -4,13 +4,10 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Post from '../routes/Post';
 import blogFetch from '../axios/config';
 
-// Mock the axios module to simulate API responses
 jest.mock('../axios/config');
 
 describe('Post component', () => {
-  // Test case for a successful API call
   test('exibe título e corpo do post após o carregamento', async () => {
-    // Mock a successful API response with data
     const mockPostData = {
       title: 'Meu Post de Teste',
       body: 'Este é o conteúdo do post de teste.',
@@ -27,7 +24,6 @@ describe('Post component', () => {
       </MemoryRouter>
     );
 
-    // Wait for the title and body to appear
     const titleElement = await screen.findByText(mockPostData.title);
     const bodyElement = await screen.findByText(mockPostData.body);
 
@@ -35,9 +31,7 @@ describe('Post component', () => {
     expect(bodyElement).toBeInTheDocument();
   });
 
-  // Test case for an API failure
   test('exibe mensagem de erro se a API falhar', async () => {
-    // Mock a failed API response
     blogFetch.get.mockRejectedValue(new Error('Erro na API'));
 
     render(
@@ -47,8 +41,6 @@ describe('Post component', () => {
         </Routes>
       </MemoryRouter>
     );
-
-    // Wait for the error message to appear
     const errorMessage = await screen.findByText(/Erro ao carregar o post/i);
 
     expect(errorMessage).toBeInTheDocument();
