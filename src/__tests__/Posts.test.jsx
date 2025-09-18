@@ -1,10 +1,56 @@
-import { render, screen } from '@testing-library/react';
-import Post from '../components/Post'; // ajuste se for outro caminho
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import Post from '../routes/Post';
+import blogFetch from '../axios/config';
+
+// Mock the axios module to simulate API responses
+jest.mock('../axios/config');
 
 describe('Post component', () => {
-  test('exibe título e autor', () => {
-    render(<Post title="Meu Post" author="João" content="Conteúdo aqui" />);
-    expect(screen.getByText('Meu Post')).toBeInTheDocument();
-    expect(screen.getByText('João')).toBeInTheDocument();
+  // Test case for a successful API call
+  test('exibe título e corpo do post após o carregamento', async () => {
+    // Mock a successful API response with data
+    const mockPostData = {
+      title: 'Meu Post de Teste',
+      body: 'Este é o conteúdo do post de teste.',
+      userId: 1,
+      id: 1,
+    };
+    blogFetch.get.mockResolvedValue({ data: mockPostData });
+
+    render(
+      <MemoryRouter initialEntries={['/posts/1']}>
+        <Routes>
+          <Route path="/posts/:id" element={<Post />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Wait for the title and body to appear
+    const titleElement = await screen.findByText(mockPostData.title);
+    const bodyElement = await screen.findByText(mockPostData.body);
+
+    expect(titleElement).toBeInTheDocument();
+    expect(bodyElement).toBeInTheDocument();
+  });
+
+  // Test case for an API failure
+  test('exibe mensagem de erro se a API falhar', async () => {
+    // Mock a failed API response
+    blogFetch.get.mockRejectedValue(new Error('Erro na API'));
+
+    render(
+      <MemoryRouter initialEntries={['/posts/1']}>
+        <Routes>
+          <Route path="/posts/:id" element={<Post />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Wait for the error message to appear
+    const errorMessage = await screen.findByText(/Erro ao carregar o post/i);
+
+    expect(errorMessage).toBeInTheDocument();
   });
 });
