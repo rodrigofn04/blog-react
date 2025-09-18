@@ -1,0 +1,29 @@
+name: Testes React
+
+on:
+  pull_request:
+    branches:
+      - '**'
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # ou a versão que o projeto usa
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Executar testes
+        run: npm test -- --passWithNoTests  # ou o comando certo que você configurou no package.json
+
